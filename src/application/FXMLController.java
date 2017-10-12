@@ -16,8 +16,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
  * FXMLController contains the underlying UI functionality for the "Database Querying - GUI" program.
@@ -65,7 +63,6 @@ public class FXMLController {
 				this.queryResultSet = this.querySubmitter.showTables();
 			} catch (SQLException e) {
 				System.err.println("Error submitting showTables();");
-				//e.printStackTrace();
 			}
 			this.tablesInDatabase.setText(this.querySubmitter.getResultSetString(this.queryResultSet));
 		}
