@@ -39,7 +39,6 @@ public class FXMLController {
 	private TextArea tablesInDatabase;		// TextArea for displaying the tables in the connected database
 	@FXML
 	private TextField queryField;			// TextField for the user to enter their query in
-	
 	private MySQLConnector connector = null;	// Connector for connecting to the MySQL database
 	private QuerySubmission querySubmitter;	// QuerySubmission for submitting queries to the MySQL database
 	private ResultSet queryResultSet;		// ResultSet containing the server's reply to user queries
