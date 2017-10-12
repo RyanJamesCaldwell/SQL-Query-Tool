@@ -12,6 +12,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -124,9 +125,15 @@ public class FXMLController {
 	 */
 	@FXML
 	public void displayAbout(ActionEvent event) {
-		new Alert(Alert.AlertType.INFORMATION, "This program is used to query MySQL databases.\nDeveloper: Ryan Caldwell\nLast Revised Date: 11-OCT-2017").showAndWait();
+		displayAlert(AlertType.INFORMATION, "This program is used to query MySQL databases.\nDeveloper: Ryan Caldwell\nLast Revised Date: 11-OCT-2017");
 	}
 	
+	// Displays an alert
+	// @param alertMessage The String that will be displayed in the alert
+	// @param alertType The AlertType that will be displayed
+	private void displayAlert(AlertType alertType, String alertMessage) {
+		new Alert(alertType, alertMessage).showAndWait();
+	}
 	
 	/**
 	 * Saves the user's most recent query result in a .txt file
@@ -162,11 +169,12 @@ public class FXMLController {
 				} catch (IOException e) {
 					System.err.println("Error creating new file.");
 				}
-				new Alert(Alert.AlertType.INFORMATION, "File " + savePath + " saved.").showAndWait();
+				
+				displayAlert(AlertType.INFORMATION, "File " + savePath + " saved.");
 			}
 		}
 		else {
-			new Alert(Alert.AlertType.ERROR, "Cannot save query since there is no output.").showAndWait();
+			displayAlert(AlertType.ERROR, "Cannot save query since there is no output.");
 		}
 	}
 }
