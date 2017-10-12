@@ -3,6 +3,7 @@ package databaseQuerying;
 import databaseConnectors.MySQLConnector;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -36,19 +37,15 @@ public class QuerySubmission {
 	 * 
 	 * @param query A String query to be sent to the database.
 	 * @return Returns the ResultSet received from the currently connected database, null if an error occurred.
+	 * @throws SQLException 
 	 */
-	public ResultSet submitReadQuery(String query) {
-		Statement statement;
+	public ResultSet submitReadQuery(String query) throws SQLException {
+		PreparedStatement statement;
 		ResultSet resultSet = null;
 		
 		if(query != null && query.length() > 1){
-			try {
-				statement = connection.createStatement();
-				resultSet = statement.executeQuery(query);
-			} catch (SQLException e) {
-				System.err.println("Error submitting read query: \"" + query + "\"");
-				e.printStackTrace();
-			}
+			statement = connection.prepareStatement(query);
+			resultSet = statement.executeQuery(query);
 		}
 		else {
 			System.err.println("Query cannot be null.");
@@ -61,18 +58,14 @@ public class QuerySubmission {
 	 * Receives a String update query to be sent to the currently connected database.
 	 * 
 	 * @param query A String update query to be sent to the database (INSERT, DELETE, MODIFY, UPDATE, etc.).
+	 * @throws SQLException 
 	 */
-	public void submitWriteQuery(String query) {
-		Statement statement;
+	public void submitWriteQuery(String query) throws SQLException {
+		PreparedStatement statement;
 		
 		if(query != null) {
-			try {
-				statement = connection.createStatement();
-				statement.executeUpdate(query);
-			} catch (SQLException e) {
-				System.err.println("Error submitting write query: \"" + query + "\"");
-				e.printStackTrace();
-			}
+			statement = connection.prepareStatement(query);
+			statement.executeUpdate(query);
 		}
 		
 		else {
@@ -84,8 +77,9 @@ public class QuerySubmission {
 	 * Queries the testing.test table "select * from testing.test" and returns the entire ResultSet.
 	 * 
 	 * @return Returns populated ResultSet if successful, null otherwise.
+	 * @throws SQLException 
 	 */
-	public ResultSet returnTable(String tableName) {
+	public ResultSet returnTable(String tableName) throws SQLException {
 		String query = "select * from " + tableName;
 		return submitReadQuery(query);
 	}
@@ -160,8 +154,9 @@ public class QuerySubmission {
 	 * Returns a ResultSet containing the different databases that are on the MySQL Server.
 	 * 
 	 * @return ResultSet containing the different databases that are on the MySQL Server.
+	 * @throws SQLException 
 	 */
-	public ResultSet showDatabases() {
+	public ResultSet showDatabases() throws SQLException {
 		return this.submitReadQuery("show databases;");
 	}
 	
@@ -169,8 +164,9 @@ public class QuerySubmission {
 	 * Returns a ResultSet containing the different tables that are in the MySQL database.
 	 * 
 	 * @return ResultSet containing the different tables that are in the MySQL database.
+	 * @throws SQLException 
 	 */
-	public ResultSet showTables() {
+	public ResultSet showTables() throws SQLException {
 		return this.submitReadQuery("show tables;");
 	}
 }

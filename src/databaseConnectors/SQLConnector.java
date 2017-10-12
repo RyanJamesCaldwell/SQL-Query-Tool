@@ -1,6 +1,7 @@
 package databaseConnectors;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * Connector interface for various database types to implement.
@@ -10,6 +11,6 @@ import java.sql.Connection;
  */
 public interface SQLConnector {
 	public Connection getConnection();
-	public void closeConnection();
+	public void closeConnection() throws SQLException;
 	public String toString();
 }

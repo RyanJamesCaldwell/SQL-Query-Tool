@@ -27,8 +27,10 @@ public final class MySQLConnector implements SQLConnector {
 	 * @param username The username that is used for database authentication
 	 * @param password The correlating password that is used for database authentication
 	 * @param databaseName The name of the database that will be used
+	 * @throws SQLException If compiler cannot find com.mysql.jdbc.Driver
+	 * @throws ClassNotFoundException If compiler cannot establish connection.
 	 */
-	public MySQLConnector(String URL, String username, String password, String databaseName) {
+	public MySQLConnector(String URL, String username, String password, String databaseName) throws ClassNotFoundException, SQLException {
 		connect = null;
 		this.url = "jdbc:mysql://" + URL + "/";
 		this.username = username;
@@ -39,29 +41,19 @@ public final class MySQLConnector implements SQLConnector {
 	
 	// Establishes the connection between the user and the MySQL database.
 	// Autoreconnect is automatically set to true, and useSSL is automatically set to false.
-	private void establishConnection() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connect = DriverManager.getConnection(this.url + this.databaseName + "?autoReconnect=true&useSSL=false&" + 
-					"user=" + this.username + "&password=" + this.password);
-		} catch (ClassNotFoundException e) {
-			System.err.println("Encountered a ClassNotFoundException.");
-		} catch (SQLException e) {
-			System.err.println("Could not connect to " + this.databaseName + ".");
-		}
+	private void establishConnection() throws ClassNotFoundException, SQLException {
+		Class.forName("com.mysql.jdbc.Driver");
+		connect = DriverManager.getConnection(this.url + this.databaseName + "?autoReconnect=true&useSSL=false&" + 
+				"user=" + this.username + "&password=" + this.password);
 	}
 	
 	/**
 	 * Closes the connection with the connected MySQL database.
+	 * @throws SQLException 
 	 */
 	@Override
-	public void closeConnection() {
-		try {
-			this.connect.close();
-		} catch (SQLException e) {
-			System.err.println("Error closing connection to " + this.databaseName + ".");
-			e.printStackTrace();
-		}
+	public void closeConnection() throws SQLException  {
+		this.connect.close();
 	}
 	
 	/**
@@ -70,7 +62,7 @@ public final class MySQLConnector implements SQLConnector {
 	 */
 	@Override
 	public String toString() {
-		return "MySQLConnector: URL - " + this.url + ", Database Name - " + this.databaseName;
+		return "MySQLConnector: URL - " + new String(this.url) + ", Database Name - " + new String(this.databaseName);
 	}
 	
 	/**
@@ -89,7 +81,7 @@ public final class MySQLConnector implements SQLConnector {
 	 * @return Username currently being used for logging into the MySQL database.
 	 */
 	public String getUsername() {
-		return this.username;
+		return new String(this.username);
 	}
 	
 	/**
@@ -112,7 +104,7 @@ public final class MySQLConnector implements SQLConnector {
 	 * @return (String) URL currently being used for connecting to the MySQL database.
 	 */
 	public String getURL() {
-		return this.url;
+		return new String(this.url);
 	}
 	
 	/**
@@ -135,6 +127,6 @@ public final class MySQLConnector implements SQLConnector {
 	 * @return The name of the database that is being connected to.
 	 */
 	public String getDatabaseName() {
-		return this.databaseName;
+		return new String(this.databaseName);
 	}
 }

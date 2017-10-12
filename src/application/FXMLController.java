@@ -1,6 +1,10 @@
 package application;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import databaseConnectors.MySQLConnector;
 import databaseQuerying.QuerySubmission;
@@ -11,6 +15,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
  * FXMLController contains the underlying UI functionality for the "Database Querying - GUI" program.
@@ -45,11 +52,24 @@ public class FXMLController {
 	 */
 	@FXML
 	public void establishConnection(ActionEvent event) {
-		this.connector = new MySQLConnector(this.databaseURLField.getText(), this.usernameField.getText(), this.passwordField.getText(), this.databaseNameField.getText());
-		this.querySubmitter = new QuerySubmission(connector);
+		try {
+			this.connector = new MySQLConnector(this.databaseURLField.getText(), this.usernameField.getText(), this.passwordField.getText(), this.databaseNameField.getText());
+		} catch (ClassNotFoundException | SQLException e) {
+			System.err.println("Could not connect to MySQL database: " + this.databaseNameField.getText());
+			this.tablesInDatabase.setText("Could not connect to the database.");
+		}
 		
-		this.queryResultSet = this.querySubmitter.showTables();
-		this.tablesInDatabase.setText(this.querySubmitter.getResultSetString(this.queryResultSet));
+		if(this.connector != null) {
+			this.querySubmitter = new QuerySubmission(connector);
+			try {
+				this.queryResultSet = this.querySubmitter.showTables();
+			} catch (SQLException e) {
+				System.err.println("Error submitting showTables();");
+				//e.printStackTrace();
+			}
+			this.tablesInDatabase.setText(this.querySubmitter.getResultSetString(this.queryResultSet));
+		}
+		
 	}
 	
 	/**
@@ -58,44 +78,92 @@ public class FXMLController {
 	@FXML
 	public void handleCloseAction(ActionEvent event) {
 		if(this.connector != null) {
-			this.connector.closeConnection();
+			try {
+				this.connector.closeConnection();
+			} catch (SQLException e) {
+				System.err.println("Error closing connection.");
+			}
 		}
 		Platform.exit();
 	}
 	
 	/**
-	 * Queries the database with the user-supplied query, then populates the TextField below with the result.
+	 * Queries the database with the user-supplied query, then populates the queryResult TextField below with the result.
 	 * <b>Note:</b> Query text field cannot be empty.
 	 */
 	@FXML
 	public void runQuery(ActionEvent event) {
-		if(this.queryField.getText() != "" && this.queryField.getText() != null && this.queryField.getText() != " ") {
+		if(this.queryField.getText() != null && this.queryField.getText().length() > 1) {
 			String newQuery = this.queryField.getText().toLowerCase();
 			
 			if(newQuery.contains("insert") || newQuery.contains("modify") || newQuery.contains("delete") || newQuery.contains("update")) {
-				this.querySubmitter.submitWriteQuery(newQuery);
+				try {
+					this.querySubmitter.submitWriteQuery(newQuery);
+				} catch (SQLException e) {
+					System.err.println("Error submitting write query: " + newQuery);
+				}
 			}
 			else {
-				this.queryResultSet = this.querySubmitter.submitReadQuery(this.queryField.getText());
+				try {
+					this.queryResultSet = this.querySubmitter.submitReadQuery(newQuery);
+				} catch (SQLException e) {
+					this.queryResult.setText("Error submitting read query: " + newQuery);
+				}
 				
 				if(this.queryResultSet != null) {
-					queryResult.setText(this.querySubmitter.getResultSetString(this.queryResultSet));
+					this.queryResult.setText(this.querySubmitter.getResultSetString(this.queryResultSet));
 				}
 				else {
-					queryResult.setText("Query cannot be null.");
+					this.queryResult.setText("Query cannot be null.");
 				}
 			}
 		}
 		else {
-			System.err.println("Error: User attempted to submit empty query.");
+			this.queryResult.setText("Error: User attempted to submit empty query.");
 		}
 	}
 	
 	/**
-	 * Gives the user information about the program.
+	 * Gives the user information about the program in a pop-up window.
 	 */
 	@FXML
 	public void displayAbout(ActionEvent event) {
 		new Alert(Alert.AlertType.INFORMATION, "This program is used to query MySQL databases.\nDeveloper: Ryan Caldwell\nLast Revised Date: 11-OCT-2017").showAndWait();
+	}
+	
+	
+	/**
+	 * Saves the user's most recent query result in a .txt file
+	 */
+	@FXML
+	public void exportQueryResults() {
+		DirectoryChooser directoryChooser = new DirectoryChooser();
+		File saveFile;
+		File selectedDirectory;
+		String savePath;
+		
+		directoryChooser.setTitle("Save Query Results");
+		File defaultDirectory = new File("/Users/ryancaldwell/Desktop/");
+		directoryChooser.setInitialDirectory(defaultDirectory);
+		selectedDirectory = directoryChooser.showDialog(null);
+		savePath = selectedDirectory.toString() + "/" + System.currentTimeMillis() + "-newQueryResult.txt";
+		
+		saveFile = new File(savePath);
+		
+		try {
+			FileWriter fw = new FileWriter(saveFile);
+			fw.write(this.queryResult.getText());
+			fw.close();
+		} catch (IOException e) {
+			System.err.println("Error exporting file.");
+		}
+		
+		try {
+			saveFile.createNewFile();
+		} catch (IOException e) {
+			System.err.println("Error creating new file.");
+		}
+		
+		new Alert(Alert.AlertType.INFORMATION, "File " + savePath + " saved.").showAndWait();
 	}
 }
