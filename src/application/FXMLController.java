@@ -142,28 +142,33 @@ public class FXMLController {
 		File selectedDirectory;
 		String savePath;
 		
-		directoryChooser.setTitle("Save Query Results");
-		File defaultDirectory = new File("/Users/ryancaldwell/Desktop/");
-		directoryChooser.setInitialDirectory(defaultDirectory);
-		selectedDirectory = directoryChooser.showDialog(null);
-		savePath = selectedDirectory.toString() + "/" + System.currentTimeMillis() + "-newQueryResult.txt";
-		
-		saveFile = new File(savePath);
-		
-		try {
-			FileWriter fw = new FileWriter(saveFile);
-			fw.write(this.queryResult.getText());
-			fw.close();
-		} catch (IOException e) {
-			System.err.println("Error exporting file.");
+		if(this.queryResult.getText().length() > 1) {
+			directoryChooser.setTitle("Save Query Results");
+			File defaultDirectory = new File("/Users/ryancaldwell/Desktop/");
+			directoryChooser.setInitialDirectory(defaultDirectory);
+			selectedDirectory = directoryChooser.showDialog(null);
+			savePath = selectedDirectory.toString() + "/" + System.currentTimeMillis() + "-newQueryResult.txt";
+			
+			saveFile = new File(savePath);
+			
+			try {
+				FileWriter fw = new FileWriter(saveFile);
+				fw.write(this.queryResult.getText());
+				fw.close();
+			} catch (IOException e) {
+				System.err.println("Error exporting file.");
+			}
+			
+			try {
+				saveFile.createNewFile();
+			} catch (IOException e) {
+				System.err.println("Error creating new file.");
+			}
+			
+			new Alert(Alert.AlertType.INFORMATION, "File " + savePath + " saved.").showAndWait();
 		}
-		
-		try {
-			saveFile.createNewFile();
-		} catch (IOException e) {
-			System.err.println("Error creating new file.");
+		else {
+			new Alert(Alert.AlertType.ERROR, "Cannot save query since there is no output.").showAndWait();
 		}
-		
-		new Alert(Alert.AlertType.INFORMATION, "File " + savePath + " saved.").showAndWait();
 	}
 }
