@@ -52,6 +52,7 @@ public class FXMLController {
 	public void establishConnection(ActionEvent event) {
 		try {
 			this.connector = new MySQLConnector(this.databaseURLField.getText(), this.usernameField.getText(), this.passwordField.getText(), this.databaseNameField.getText());
+			this.connector.establishConnection();
 		} catch (ClassNotFoundException | SQLException e) {
 			System.err.println("Could not connect to MySQL database: " + this.databaseNameField.getText());
 			this.tablesInDatabase.setText("Could not connect to the database.");
@@ -128,7 +129,8 @@ public class FXMLController {
 		displayAlert(AlertType.INFORMATION, "This program is used to query MySQL databases.\nDeveloper: Ryan Caldwell\nLast Revised Date: 11-OCT-2017");
 	}
 	
-	// Displays an alert
+	// Displays an alert with a string and Alert type
+	//
 	// @param alertMessage The String that will be displayed in the alert
 	// @param alertType The AlertType that will be displayed
 	private void displayAlert(AlertType alertType, String alertMessage) {
