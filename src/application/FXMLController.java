@@ -161,7 +161,8 @@ public class FXMLController {
 				
 				try {
 					FileWriter fw = new FileWriter(saveFile);
-					fw.write(this.queryResult.getText());
+					fw.write("Query: " + this.queryField.getText() + "\n\r");
+					fw.append(this.queryResult.getText());
 					fw.close();
 				} catch (IOException e) {
 					System.err.println("Error exporting file.");
