@@ -53,21 +53,24 @@ public class FXMLController {
 		try {
 			this.connector = new MySQLConnector(this.databaseURLField.getText(), this.usernameField.getText(), this.passwordField.getText(), this.databaseNameField.getText());
 			this.connector.establishConnection();
+			updateUIAfterConnection();
 		} catch (ClassNotFoundException | SQLException e) {
 			System.err.println("Could not connect to MySQL database: " + this.databaseNameField.getText());
 			this.tablesInDatabase.setText("Could not connect to the database.");
 		}
-		
-		if(this.connector != null) {
-			this.querySubmitter = new QuerySubmission(connector);
-			try {
-				this.queryResultSet = this.querySubmitter.showTables();
-			} catch (SQLException e) {
-				System.err.println("Error submitting showTables();");
-			}
-			this.tablesInDatabase.setText(this.querySubmitter.getResultSetString(this.queryResultSet));
+	}
+	
+	/**
+	 * Submits a showTables() query to the connected database, updates the UI with which tables are available for querying.
+	 */
+	private void updateUIAfterConnection() {
+		this.querySubmitter = new QuerySubmission(connector);
+		try {
+			this.queryResultSet = this.querySubmitter.showTables();
+		} catch (SQLException e) {
+			System.err.println("Error submitting showTables();");
 		}
-		
+		this.tablesInDatabase.setText(this.querySubmitter.getResultSetString(this.queryResultSet));
 	}
 	
 	/**
@@ -78,7 +81,7 @@ public class FXMLController {
 		if(this.connector != null) {
 			try {
 				this.connector.closeConnection();
-			} catch (SQLException e) {
+			} catch (SQLException | NullPointerException e) {
 				System.err.println("Error closing connection.");
 			}
 		}

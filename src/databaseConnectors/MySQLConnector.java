@@ -15,8 +15,8 @@ import java.sql.SQLException;
 public final class MySQLConnector implements SQLConnector {
 	
 	private String url;					// The URL to connect to the database
-	private String username;			// The username that is used for database authentication
-	private String password;			// The correlating password that is used for database authentication
+	private String username;				// The username that is used for database authentication
+	private String password;				// The correlating password that is used for database authentication
 	private final String databaseName;	// The name of the database that will be used
 	private Connection connect;			// The connection made to the MySQL database
 	
