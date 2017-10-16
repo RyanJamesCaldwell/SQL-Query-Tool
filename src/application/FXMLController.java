@@ -152,8 +152,6 @@ public class FXMLController {
 		
 		if(this.queryResult.getText().length() > 1) {
 			directoryChooser.setTitle("Save Query Results");
-			File defaultDirectory = new File("/Users/ryancaldwell/Desktop/");
-			directoryChooser.setInitialDirectory(defaultDirectory);
 			selectedDirectory = directoryChooser.showDialog(null);
 			
 			if(selectedDirectory != null) {

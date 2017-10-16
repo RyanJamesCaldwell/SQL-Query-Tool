@@ -16,7 +16,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem mnemonicParsing="false" text="Export" onAction="#exportQueryResults" />
+                  <MenuItem mnemonicParsing="false" onAction="#exportQueryResults" text="Export" />
               <MenuItem mnemonicParsing="false" onAction="#handleCloseAction" text="Close" />
             </items>
           </Menu>
@@ -27,19 +27,19 @@
           </Menu>
         </menus>
       </MenuBar>
-      <Label layoutX="52.0" layoutY="80.0" text="Database URL:" />
-      <Label layoutX="76.0" layoutY="110.0" text="Username:" />
-      <Label layoutX="78.0" layoutY="141.0" text="Password:" />
-      <Label layoutX="44.0" layoutY="173.0" text="Database name:" />
-      <TextField fx:id="databaseURLField" layoutX="151.0" layoutY="75.0" text="localhost:3306" />
-      <TextField fx:id="usernameField" layoutX="151.0" layoutY="105.0" />
-      <TextField fx:id="databaseNameField" layoutX="151.0" layoutY="168.0" />
+      <Label layoutX="32.0" layoutY="86.0" text="Database URL:" />
+      <Label layoutX="56.0" layoutY="116.0" text="Username:" />
+      <Label layoutX="58.0" layoutY="147.0" text="Password:" />
+      <Label layoutX="24.0" layoutY="179.0" text="Database name:" />
+      <TextField fx:id="databaseURLField" layoutX="131.0" layoutY="81.0" text="localhost:3306" />
+      <TextField fx:id="usernameField" layoutX="131.0" layoutY="111.0" />
+      <TextField fx:id="databaseNameField" layoutX="131.0" layoutY="174.0" />
       <TextArea fx:id="queryResult" editable="false" layoutX="7.0" layoutY="305.0" prefHeight="391.0" prefWidth="698.0" />
-      <TextArea fx:id="tablesInDatabase" editable="false" layoutX="387.0" layoutY="73.0" prefHeight="136.0" prefWidth="265.0" />
-      <Label layoutX="453.0" layoutY="52.0" text="Tables in database" />
+      <TextArea fx:id="tablesInDatabase" editable="false" layoutX="338.0" layoutY="66.0" prefHeight="179.0" prefWidth="340.0" />
+      <Label layoutX="450.0" layoutY="49.0" text="Tables in database" />
       <Button layoutX="539.0" layoutY="268.0" mnemonicParsing="false" onAction="#runQuery" text="Run Query" />
-      <Button layoutX="170.0" layoutY="204.0" mnemonicParsing="false" onAction="#establishConnection" text="Establish Connection" />
+      <Button layoutX="150.0" layoutY="210.0" mnemonicParsing="false" onAction="#establishConnection" text="Establish Connection" />
       <TextField fx:id="queryField" layoutX="77.0" layoutY="268.0" prefHeight="27.0" prefWidth="442.0" />
-      <PasswordField fx:id="passwordField" layoutX="151.0" layoutY="136.0" />
+      <PasswordField fx:id="passwordField" layoutX="131.0" layoutY="142.0" />
    </children>
 </AnchorPane>

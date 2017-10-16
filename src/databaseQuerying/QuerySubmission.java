@@ -137,7 +137,6 @@ public class QuerySubmission {
 						sb.append("\n");
 					}
 					columnValue = result.getString(i);
-					//System.out.print(rsmd.getColumnLabel(i) + ": " + columnValue);
 					sb.append(rsmd.getColumnLabel(i) + ": " + columnValue);
 				}
 				sb.append("\n\n");
