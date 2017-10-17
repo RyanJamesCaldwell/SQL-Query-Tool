@@ -12,5 +12,6 @@ import java.sql.SQLException;
 public interface SQLConnector {
 	public Connection getConnection();
 	public void closeConnection() throws SQLException;
+	@Override
 	public String toString();
 }
