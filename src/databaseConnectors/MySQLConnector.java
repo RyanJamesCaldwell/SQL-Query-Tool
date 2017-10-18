@@ -41,7 +41,8 @@ public final class MySQLConnector implements SQLConnector {
 	// Establishes the connection between the user and the MySQL database.
 	// Autoreconnect is automatically set to true, and useSSL is automatically set to false.
 	public void establishConnection() throws ClassNotFoundException, SQLException {
-		Class.forName("com.mysql.jdbc.Driver");
+		String JDBCDriver = "com.mysql.jdbc.Driver";
+		Class.forName(JDBCDriver);
 		connect = DriverManager.getConnection(this.url + this.databaseName + "?autoReconnect=true&useSSL=false&" + 
 				"user=" + this.username + "&password=" + this.password);
 	}
