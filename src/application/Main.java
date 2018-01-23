@@ -16,7 +16,7 @@ import javafx.scene.image.Image;
 public class Main extends Application {
 	
 	/**
-	 * Sets up the primary stage for the UI
+	 * Primary window for the UI
 	 */
 	@Override
 	public void start(Stage primaryStage) {
@@ -33,7 +33,7 @@ public class Main extends Application {
 	}
 	
 	/**
-	 * Launches the application.
+	 * Launches JavaFX application.
 	 */
 	public static void main(String[] args) {
 		launch(args);
