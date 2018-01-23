@@ -25,7 +25,6 @@ public class Main extends Application {
 			Scene scene = new Scene(root, 712, 703);
 			primaryStage.setTitle("Database Querying - GUI");
 			primaryStage.setScene(scene);
-			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/images/9JK9Gzs.jpg")));
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
